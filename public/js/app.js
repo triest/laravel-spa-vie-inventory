@@ -29444,8 +29444,8 @@ var render = function () {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.product.code_type,
-                      expression: "product.code_type",
+                      value: _vm.product.equipment_type_id,
+                      expression: "product.equipment_type_id",
                     },
                   ],
                   on: {
@@ -29460,7 +29460,7 @@ var render = function () {
                         })
                       _vm.$set(
                         _vm.product,
-                        "code_type",
+                        "equipment_type_id",
                         $event.target.multiple
                           ? $$selectedVal
                           : $$selectedVal[0]
@@ -29469,8 +29469,8 @@ var render = function () {
                   },
                 },
                 _vm._l(_vm.code_types, function (code_type) {
-                  return _c("option", { domProps: { value: code_type.code } }, [
-                    _vm._v(_vm._s(code_type.name)),
+                  return _c("option", { domProps: { value: code_type.id } }, [
+                    _vm._v(_vm._s(code_type.code)),
                   ])
                 }),
                 0

@@ -17,8 +17,8 @@
             <label>Serial</label>
             <input type="text" class="form-control" v-model="product.serial">
           </div> <br>
-          <select v-model="product.code_type">
-            <option v-for="code_type in code_types" v-bind:value="code_type.code" >{{ code_type.name }}</option>
+          <select v-model="product.equipment_type_id">
+            <option v-for="code_type in code_types" v-bind:value="code_type.id"  >{{ code_type.code }}</option>
           </select>
           <button type="submit" class="btn btn-primary">Update</button>
           <router-link :to="{name: 'home'}" class="btn btn-success">Back</router-link>
