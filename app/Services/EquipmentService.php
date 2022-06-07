@@ -18,16 +18,28 @@ class EquipmentService
             'Z' => '(?i)(\W|^)(-|_|@)(\W|$)'
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getAll()
     {
         return Equipment::all();
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function get($id)
     {
         return Equipment::whereId($id)->first();
     }
 
+    /**
+     * @param array $data
+     * @return array
+     * @throws \Exception
+     */
     public function create(array $data)
     {
         $serials = $data['serial'];
@@ -54,7 +66,7 @@ class EquipmentService
             $errors = $this->validate($serial, $equipmentType->serial_mask);
 
             if ($errors) {
-                //    throw  new \Exception(implode(',',$errors));
+                throw  new \Exception(implode(',', $errors));
             }
             $result_array[] = [
                     'code' => $data['code'],
@@ -63,7 +75,7 @@ class EquipmentService
                     'equipmentType' => $data['code_type']
             ];
         }
-
+        $result_collection = [];
         foreach ($result_array as $item) {
             $equipment = new Equipment();
             $equipment->code = $item['code'];
@@ -72,9 +84,17 @@ class EquipmentService
             $equipmentType = EquipmentType::where(['code' => $item['equipmentType']])->firstOrFail();
             $equipment->equipmentType()->associate($equipmentType);
             $equipment->save();
+            $result_collection[] = $equipment;
         }
+
+        return $result_collection;
     }
 
+    /**
+     * @param $serial
+     * @param $mask
+     * @return array
+     */
     public function validate($serial, $mask)
     {
         $errors = [];
@@ -89,23 +109,21 @@ class EquipmentService
         return $errors;
     }
 
+    /**
+     * @param Equipment $equipment
+     * @param array $data
+     * @return Equipment
+     * @throws \Exception
+     */
     public function update(Equipment $equipment, array $data)
     {
         $serials = $data['serial'];
-
         $equipmentType = EquipmentType::where(['code' => $data['code_type']])->first();
         if (!$equipmentType) {
-            throw new \Exception('Code ' . $data['code_type'] . 'not found');
+            throw new \Exception('Code ' . $data['code_type'] . ' not found');
         }
 
         $result_array = [];
-
-
-        $equipmentType = EquipmentType::where(['code' => $data['code_type']])->first();
-        if (!$equipmentType) {
-            throw new \Exception('Code ' . $data['code_type'] . 'not found');
-        }
-
 
         $errors = $this->validate($serials, $equipmentType->serial_mask);
 
@@ -127,6 +145,11 @@ class EquipmentService
         $equipment->equipmentType()->associate($equipmentType);
         $equipment->save();
         return $equipment->refresh();
+    }
+
+    public function destroy(Equipment $equipment): ?bool
+    {
+        return $equipment->delete();
     }
 }
 

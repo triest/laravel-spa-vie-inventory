@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function (){
     Route::apiResource('equipment',EquipmentController::class);
-    Route::get('equipment-type',[EquipmentController::class,'equipment-type']);
+    Route::get('equipment-type',[EquipmentController::class,'equipmentType']);
 });
 
 
