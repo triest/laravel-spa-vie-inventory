@@ -16,7 +16,7 @@
             <input type="text" class="form-control" v-model="product.code">
           </div>
           <div class="form-group">
-            <label>Detail</label>
+            <label>Comment</label>
             <input type="text" class="form-control" v-model="product.comment">
           </div>
           <div class="form-group">
