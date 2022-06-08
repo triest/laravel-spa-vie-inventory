@@ -12,10 +12,9 @@
 
 import {mapGetters} from 'vuex';
 import {mapActions} from 'vuex';
-export default {
-    components:{
 
-    },
+export default {
+    components: {},
     data() {
         return {
             authUser: window.authUser
@@ -25,15 +24,13 @@ export default {
         console.log(this.authUser);
         this.redirectNotLogin();
     },
-    computed : {
-
-    },
+    computed: {},
     mounted() {
 
     },
     methods: {
-        redirectNotLogin(){
-            if(this.authUser === null){
+        redirectNotLogin() {
+            if (this.authUser === null) {
                 this.$router.push('login')
             }
         },
@@ -58,16 +55,19 @@ ul {
     margin-left: 10%;
     overflow: auto;
 }
+
 li a {
     display: block;
     color: #000;
     padding: 8px 16px;
     text-decoration: none;
 }
+
 li a.active {
     background-color: #04AA6D;
     color: white;
 }
+
 li a:hover:not(.active) {
     background-color: #555;
     color: white;

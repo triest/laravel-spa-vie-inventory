@@ -21,7 +21,9 @@
                 </button>
               </div>
               <div class="col-12 text-center">
-                <label>Don't have an account? <router-link :to="{name:'register'}">Register Now!</router-link></label>
+                <label>Don't have an account?
+                  <router-link :to="{name:'register'}">Register Now!</router-link>
+                </label>
               </div>
             </form>
           </div>
@@ -32,31 +34,32 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import {mapActions} from 'vuex'
+
 export default {
-    name:"login",
-    data(){
+    name: "login",
+    data() {
         return {
-            auth:{
-                email:"",
-                password:""
+            auth: {
+                email: "",
+                password: ""
             },
-            processing:false
+            processing: false
         }
     },
-    methods:{
+    methods: {
         ...mapActions({
-            signIn:'auth/login'
+            signIn: 'auth/login'
         }),
-        async login(){
+        async login() {
             this.processing = true
             await axios.get('/sanctum/csrf-cookie')
-            await axios.post('api/user/login',this.auth).then(({data})=>{
-                this.signIn() ;
+            await axios.post('/api/user/login', this.auth).then(({data}) => {
+                this.signIn();
                 this.$router.push('home')
-            }).catch(({response:data})=>{
+            }).catch(({response: data}) => {
                 alert(data.data.message)
-            }).finally(()=>{
+            }).finally(() => {
                 this.processing = false
             })
         },

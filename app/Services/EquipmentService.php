@@ -18,6 +18,13 @@ class EquipmentService
             'Z' => '(?i)(\W|^)(-|_|@)(\W|$)'
     ];
 
+    private $availableKeys = [
+            'code_type',
+            'comment',
+            'serial',
+            'code'
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -42,6 +49,14 @@ class EquipmentService
      */
     public function create(array $data)
     {
+        if ($fields = !empty(array_diff_key(array_flip($this->availableKeys), $data))) {
+            throw new \Exception(
+                    'Field is required:' . implode(
+                            ',',
+                            array_keys(array_diff_key(array_flip($this->availableKeys), $data))
+                    )
+            );
+        }
         $serials = $data['serial'];
         $error_array = [];
         $equipmentType = EquipmentType::where(['code' => $data['code_type']])->first();
@@ -71,7 +86,7 @@ class EquipmentService
             $result_array[] = [
                     'code' => $data['code'],
                     'serial' => $serial,
-                    'comment' => $data['comment'],
+                    'comment' => $data['comment'] ?? null,
                     'equipmentType' => $data['code_type']
             ];
         }
@@ -99,8 +114,8 @@ class EquipmentService
     {
         $errors = [];
         foreach (str_split($serial) as $key => $char) {
-            preg_match('/[' . $this->rules[$mask[$key]] . ']/', $char,$matches);
-            if(empty($matches)){
+            preg_match('/[' . $this->rules[$mask[$key]] . ']/', $char, $matches);
+            if (empty($matches)) {
                 $errors[$char] = $this->rules[$mask[$key]];
             }
         }
@@ -112,14 +127,18 @@ class EquipmentService
      * @param array $errors
      * @return array|string
      */
-    public function printErrors(array $errors){
-        if(empty($errors)){
+    public function printErrors(array $errors)
+    {
+        if (empty($errors)) {
             return $errors;
         }
         $flattened = $errors;
-        array_walk($flattened, function(&$value, $key) {
-            $value = "{$key}:{$value}";
-        });
+        array_walk(
+                $flattened,
+                function (&$value, $key) {
+                    $value = "{$key}:{$value}";
+                }
+        );
         return implode(', ', $flattened);
     }
 

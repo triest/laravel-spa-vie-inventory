@@ -5451,6 +5451,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -5486,6 +5490,8 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         if (err.response.status === 422) {
           _this2.errors = err.response.data.errors;
+        } else {
+          alert(err.response.data.message);
         }
       });
     }
@@ -5760,6 +5766,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "login",
@@ -5789,7 +5797,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
               case 3:
                 _context.next = 5;
-                return axios.post('api/user/login', _this.auth).then(function (_ref) {
+                return axios.post('/api/user/login', _this.auth).then(function (_ref) {
                   var data = _ref.data;
 
                   _this.signIn();
@@ -5797,7 +5805,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   _this.$router.push('home');
                 })["catch"](function (_ref2) {
                   var data = _ref2.response;
-                  console.log(data.data.message);
                   alert(data.data.message);
                 })["finally"](function () {
                   _this.processing = false;
@@ -29448,6 +29455,34 @@ var render = function () {
               _vm._v(" "),
               _c("br"),
               _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", [_vm._v("Code type")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.product.serial,
+                      expression: "product.serial",
+                    },
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.product.serial },
+                  on: {
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.product, "serial", $event.target.value)
+                    },
+                  },
+                }),
+              ]),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
               _c(
                 "select",
                 {
@@ -29455,8 +29490,8 @@ var render = function () {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.product.equipment_type_id,
-                      expression: "product.equipment_type_id",
+                      value: _vm.product.code_type,
+                      expression: "product.code_type",
                     },
                   ],
                   on: {
@@ -29471,7 +29506,7 @@ var render = function () {
                         })
                       _vm.$set(
                         _vm.product,
-                        "equipment_type_id",
+                        "code_type",
                         $event.target.multiple
                           ? $$selectedVal
                           : $$selectedVal[0]
@@ -29480,12 +29515,14 @@ var render = function () {
                   },
                 },
                 _vm._l(_vm.code_types, function (code_type) {
-                  return _c("option", { domProps: { value: code_type.id } }, [
+                  return _c("option", { domProps: { value: code_type.code } }, [
                     _vm._v(_vm._s(code_type.code)),
                   ])
                 }),
                 0
               ),
+              _vm._v(" "),
+              _c("br"),
               _vm._v(" "),
               _c(
                 "button",
@@ -29834,7 +29871,7 @@ var render = function () {
                   _c(
                     "label",
                     [
-                      _vm._v("Don't have an account? "),
+                      _vm._v("Don't have an account?\n                "),
                       _c(
                         "router-link",
                         { attrs: { to: { name: "register" } } },
