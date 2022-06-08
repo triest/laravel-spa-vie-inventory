@@ -20,6 +20,13 @@ Route::middleware('auth:sanctum')->group(
         function () {
             Route::apiResource('equipment', EquipmentController::class);
             Route::get('equipment-type', [EquipmentController::class, 'equipmentType']);
+
+            Route::prefix('user')->group(
+                    function () {
+                        Route::post('/logout', [AuthController::class, 'logout']);
+                    }
+            );
+
         }
 );
 
@@ -28,6 +35,6 @@ Route::prefix('user')->group(
         function () {
             Route::post('/register', [AuthController::class, 'register']);
             Route::post('/login', [AuthController::class, 'login']);
-            Route::post('/logout', [AuthController::class, 'logout']);
+
         }
 );
