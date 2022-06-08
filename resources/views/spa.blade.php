@@ -8,8 +8,12 @@
     <link href="{{ mix('css/app.css') }}" type="text/css" rel="stylesheet" />
 </head>
 <body>
-sa
-<div id="app">
+@if (Auth::check())
+    <script>window.authUser={!! json_encode(Auth::user()); !!};</script>
+@else
+    <script>window.authUser=null;</script>
+@endif
+<div id="app" style="width:800px; margin:0 auto;">
 </div>
 
 <script src="{{ mix('js/app.js') }}"></script>

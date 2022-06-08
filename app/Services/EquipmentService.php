@@ -66,7 +66,7 @@ class EquipmentService
             $errors = $this->validate($serial, $equipmentType->serial_mask);
 
             if ($errors) {
-                throw  new \Exception(implode(',', $errors));
+                throw  new \Exception($errors);
             }
             $result_array[] = [
                     'code' => $data['code'],
@@ -99,14 +99,28 @@ class EquipmentService
     {
         $errors = [];
         foreach (str_split($serial) as $key => $char) {
-            $result = preg_match('/[' . $this->rules[$mask[$key]] . ']/', $char);
-
-
-            if ($result !== 0) {
-                $errors[$key] = $mask[$key];
+            preg_match('/[' . $this->rules[$mask[$key]] . ']/', $char,$matches);
+            if(empty($matches)){
+                $errors[$char] = $this->rules[$mask[$key]];
             }
         }
-        return $errors;
+
+        return $this->printErrors($errors);
+    }
+
+    /**
+     * @param array $errors
+     * @return array|string
+     */
+    public function printErrors(array $errors){
+        if(empty($errors)){
+            return $errors;
+        }
+        $flattened = $errors;
+        array_walk($flattened, function(&$value, $key) {
+            $value = "{$key}:{$value}";
+        });
+        return implode(', ', $flattened);
     }
 
     /**
@@ -128,7 +142,7 @@ class EquipmentService
         $errors = $this->validate($serials, $equipmentType->serial_mask);
 
         if ($errors) {
-            //    throw  new \Exception(implode(',',$errors));
+            throw  new \Exception($errors);
         }
         $result_array[] = [
                 'code' => $data['code'],
@@ -147,6 +161,10 @@ class EquipmentService
         return $equipment->refresh();
     }
 
+    /**
+     * @param Equipment $equipment
+     * @return bool|null
+     */
     public function destroy(Equipment $equipment): ?bool
     {
         return $equipment->delete();

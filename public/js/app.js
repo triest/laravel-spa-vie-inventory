@@ -5378,20 +5378,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {},
   data: function data() {
-    return {};
+    return {
+      authUser: window.authUser
+    };
+  },
+  created: function created() {
+    console.log(this.authUser);
+    this.redirectNotLogin();
   },
   computed: {},
   mounted: function mounted() {},
-  methods: {}
+  methods: {
+    redirectNotLogin: function redirectNotLogin() {
+      if (this.authUser === null) {
+        this.$router.push('login');
+      }
+    },
+    logout: function logout() {
+      axios.get('api/user/logout');
+      window.authUser = null;
+      this.$router.reload;
+    }
+  }
 });
 
 /***/ }),
@@ -5665,7 +5678,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5781,9 +5793,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                   var data = _ref.data;
 
                   _this.signIn();
+
+                  _this.$router.push('home');
                 })["catch"](function (_ref2) {
-                  var data = _ref2.response.data;
-                  alert(data.message);
+                  var data = _ref2.response;
+                  console.log(data.data.message);
+                  alert(data.data.message);
                 })["finally"](function () {
                   _this.processing = false;
                 });
@@ -29275,31 +29290,27 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("ul"),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-primary",
-        on: {
-          click: function ($event) {
-            return _vm.example()
-          },
-        },
-      },
-      [_vm._v("Example")]
-    ),
-    _vm._v(" "),
     _c(
       "div",
-      {
-        staticStyle: {
-          "margin-left": "30%",
-          padding: "1px 16px",
-          height: "1000px",
-        },
-      },
-      [_c("router-view")],
+      { staticStyle: { padding: "1px 16px", height: "1000px" } },
+      [
+        _vm.authUser !== null
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-success",
+                on: {
+                  click: function ($event) {
+                    return _vm.logout()
+                  },
+                },
+              },
+              [_vm._v("Logout")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _c("router-view"),
+      ],
       1
     ),
   ])
@@ -29665,19 +29676,6 @@ var render = function () {
                       },
                     },
                     [_vm._v("Edit")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger",
-                      on: {
-                        click: function ($event) {
-                          return _vm.deleteProduct(product.id)
-                        },
-                      },
-                    },
-                    [_vm._v("Delete")]
                   ),
                 ],
                 1

@@ -1,11 +1,7 @@
 <template>
   <div class="container">
-    <ul>
-
-    </ul>
-    <button class="btn btn-primary" v-on:click="example()">Example</button>
-
-    <div style="margin-left:30%;padding:1px 16px;height:1000px;">
+    <div style="padding:1px 16px;height:1000px;">
+      <button v-if="authUser !== null" v-on:click="logout()" class="btn btn-success">Logout</button>
       <router-view></router-view>
     </div>
 
@@ -22,7 +18,12 @@ export default {
     },
     data() {
         return {
+            authUser: window.authUser
         }
+    },
+    created() {
+        console.log(this.authUser);
+        this.redirectNotLogin();
     },
     computed : {
 
@@ -31,7 +32,16 @@ export default {
 
     },
     methods: {
-
+        redirectNotLogin(){
+            if(this.authUser === null){
+                this.$router.push('login')
+            }
+        },
+        logout() {
+            axios.get('api/user/logout')
+            window.authUser = null
+            this.$router.reload
+        }
     }
 }
 </script>

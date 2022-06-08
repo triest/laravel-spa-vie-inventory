@@ -52,9 +52,10 @@ export default {
             this.processing = true
             await axios.get('/sanctum/csrf-cookie')
             await axios.post('api/user/login',this.auth).then(({data})=>{
-                this.signIn()
-            }).catch(({response:{data}})=>{
-                alert(data.message)
+                this.signIn() ;
+                this.$router.push('home')
+            }).catch(({response:data})=>{
+                alert(data.data.message)
             }).finally(()=>{
                 this.processing = false
             })

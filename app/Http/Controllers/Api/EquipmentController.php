@@ -26,7 +26,10 @@ class EquipmentController extends Controller
     }
 
 
-    public function index(Request $request)
+    /**
+     * @return EquipmentCollection
+     */
+    public function index()
     {
         $collection = $this->equipmentService->getAll();
         return new EquipmentCollection($collection);
@@ -78,7 +81,7 @@ class EquipmentController extends Controller
     public function destroy(Equipment $equipment)
     {
         $this->equipmentService->destroy($equipment);
-        return response([[], 204])->setStatusCode(204);
+        return response([[], 204]);
     }
 
     /**
