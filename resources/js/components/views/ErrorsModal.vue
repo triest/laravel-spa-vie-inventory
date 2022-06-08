@@ -37,61 +37,13 @@ export default {
         }
     },
     mounted() {
-        if (this.present != null) {
-            this.name = this.present.name;
-            this.price = this.present.price;
-            this.enable=this.present.enabled;
-            //    this.emit(this.present.enabled)
-        }
+
     },
     /* считаем выделенные*/
-    computed: {
-        countSelectedTargets: function () {
-            return this.select2targets.length
-        },
-        countSelectedInteres: function () {
-            return this.select2inters.length
-        },
-        countSelectedChildren: function () {
-            if (this.select2children != null) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        countSelectedRelation: function () {
-        },
-        // вычисляем макс
-        minAge: function () {
-            return this.from
-        },
-        maxAge: function () {
-            return this.to
-        }
-    },
+
     data() {
         return {
-            seach: "",
-            from: "18",
-            to: "18",
-            targets: "",
-            interest: " ",
-            relation: "",
-            meet: "",
-            children: [],
-            select2targets: [],
-            select2inters: [],
-            select2children: null,
-            select2relation: [],
-            searchSettings: null,
-            targets_show: false,
-            interes_show: false,
-            children_show: false,
-            relation_show: false,
-            galerayFile: '',
-            name: "name",
-            price: 100,
-            enable:false,
+
         }
     },
     methods: {
@@ -99,30 +51,6 @@ export default {
             this.$emit('closePresentModal')
         },
         findUserByid() {
-        },
-        saveChange() {
-            let formData = new FormData();
-            formData.append('file', this.galerayFile);
-            formData.append('name', this.name);
-            formData.append('price', this.price);
-            formData.append('file', this.galerayFile);
-            formData.append('enable', this.enable);
-            if (this.present != null) {
-                formData.append('present', this.present.id);
-            }
-            axios.post('/admin/presents/list/store-present', formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }).then((response) => {
-                //this.getSettings();
-                //         this.$emit('closePresentModal')
-                this.$emit('closePresentModal')
-            });
-        },
-        handleFileUploadGaleay() {
-            this.galerayFile = this.$refs.galerayFileInput.files[0];
         },
     },
 };

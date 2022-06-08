@@ -5455,6 +5455,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -5464,7 +5469,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       product: {},
       code_types: {},
-      errors: null
+      errors: null,
+      localErrors: null
     };
   },
   created: function created() {
@@ -5494,6 +5500,29 @@ __webpack_require__.r(__webpack_exports__);
           alert(err.response.data.message);
         }
       });
+    },
+    checkForm: function checkForm(e) {
+      console.log(e);
+      console.log(this.product.code);
+      this.localErrors = [];
+
+      if (!this.product.code) {
+        this.localErrors.push('Code is required');
+      }
+
+      if (!this.product.comment) {
+        this.localErrors.push('Comment is required');
+      }
+
+      if (!this.product.serial) {
+        this.localErrors.push('Serial is required');
+      }
+
+      e.preventDefault();
+
+      if (this.localErrors.length === 0) {
+        this.update();
+      }
     }
   }
 });
@@ -5548,95 +5577,17 @@ __webpack_require__.r(__webpack_exports__);
       "default": null
     }
   },
-  mounted: function mounted() {
-    if (this.present != null) {
-      this.name = this.present.name;
-      this.price = this.present.price;
-      this.enable = this.present.enabled; //    this.emit(this.present.enabled)
-    }
-  },
+  mounted: function mounted() {},
 
   /* считаем выделенные*/
-  computed: {
-    countSelectedTargets: function countSelectedTargets() {
-      return this.select2targets.length;
-    },
-    countSelectedInteres: function countSelectedInteres() {
-      return this.select2inters.length;
-    },
-    countSelectedChildren: function countSelectedChildren() {
-      if (this.select2children != null) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    countSelectedRelation: function countSelectedRelation() {},
-    // вычисляем макс
-    minAge: function minAge() {
-      return this.from;
-    },
-    maxAge: function maxAge() {
-      return this.to;
-    }
-  },
   data: function data() {
-    return {
-      seach: "",
-      from: "18",
-      to: "18",
-      targets: "",
-      interest: " ",
-      relation: "",
-      meet: "",
-      children: [],
-      select2targets: [],
-      select2inters: [],
-      select2children: null,
-      select2relation: [],
-      searchSettings: null,
-      targets_show: false,
-      interes_show: false,
-      children_show: false,
-      relation_show: false,
-      galerayFile: '',
-      name: "name",
-      price: 100,
-      enable: false
-    };
+    return {};
   },
   methods: {
     close: function close() {
       this.$emit('closePresentModal');
     },
-    findUserByid: function findUserByid() {},
-    saveChange: function saveChange() {
-      var _this = this;
-
-      var formData = new FormData();
-      formData.append('file', this.galerayFile);
-      formData.append('name', this.name);
-      formData.append('price', this.price);
-      formData.append('file', this.galerayFile);
-      formData.append('enable', this.enable);
-
-      if (this.present != null) {
-        formData.append('present', this.present.id);
-      }
-
-      axios.post('/admin/presents/list/store-present', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (response) {
-        //this.getSettings();
-        //         this.$emit('closePresentModal')
-        _this.$emit('closePresentModal');
-      });
-    },
-    handleFileUploadGaleay: function handleFileUploadGaleay() {
-      this.galerayFile = this.$refs.galerayFileInput.files[0];
-    }
+    findUserByid: function findUserByid() {}
   }
 });
 
@@ -29346,12 +29297,26 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h3", { staticClass: "text-center" }, [_vm._v("Edit1")]),
+    _c("h3", { staticClass: "text-center" }, [_vm._v("Edit")]),
     _vm._v(" "),
     _c(
       "div",
       { staticClass: "row" },
       [
+        _vm.localErrors && _vm.localErrors.length
+          ? _c("div", [
+              _c("b", [_vm._v("Please? fix errors")]),
+              _vm._v(" "),
+              _c(
+                "ul",
+                _vm._l(_vm.localErrors, function (error) {
+                  return _c("li", [_vm._v(_vm._s(error))])
+                }),
+                0
+              ),
+            ])
+          : _vm._e(),
+        _vm._v(" "),
         _vm.errors
           ? _c("errors-modal", {
               attrs: { errors: _vm.errors },
@@ -29366,14 +29331,7 @@ var render = function () {
         _c("div", { staticClass: "col-md-6" }, [
           _c(
             "form",
-            {
-              on: {
-                submit: function ($event) {
-                  $event.preventDefault()
-                  return _vm.update.apply(null, arguments)
-                },
-              },
-            },
+            { on: { submit: _vm.checkForm } },
             [
               _c("div", { staticClass: "form-group" }, [
                 _c("label", [_vm._v("Code")]),
@@ -29453,75 +29411,48 @@ var render = function () {
                 }),
               ]),
               _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("Code type")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.product.serial,
-                      expression: "product.serial",
-                    },
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "text" },
-                  domProps: { value: _vm.product.serial },
-                  on: {
-                    input: function ($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.product, "serial", $event.target.value)
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.product.code_type,
+                        expression: "product.code_type",
+                      },
+                    ],
+                    on: {
+                      change: function ($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function (o) {
+                            return o.selected
+                          })
+                          .map(function (o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.product,
+                          "code_type",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
                     },
                   },
-                }),
+                  _vm._l(_vm.code_types, function (code_type) {
+                    return _c(
+                      "option",
+                      { domProps: { value: code_type.code } },
+                      [_vm._v(_vm._s(code_type.code))]
+                    )
+                  }),
+                  0
+                ),
               ]),
-              _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
-              _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.product.code_type,
-                      expression: "product.code_type",
-                    },
-                  ],
-                  on: {
-                    change: function ($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function (o) {
-                          return o.selected
-                        })
-                        .map(function (o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.product,
-                        "code_type",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
-                    },
-                  },
-                },
-                _vm._l(_vm.code_types, function (code_type) {
-                  return _c("option", { domProps: { value: code_type.code } }, [
-                    _vm._v(_vm._s(code_type.code)),
-                  ])
-                }),
-                0
-              ),
-              _vm._v(" "),
               _c("br"),
               _vm._v(" "),
               _c(
