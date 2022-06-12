@@ -29360,7 +29360,7 @@ var render = function () {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v("Detail")]),
+                _c("label", [_vm._v("Comment")]),
                 _vm._v(" "),
                 _c("input", {
                   directives: [
